@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::get('/', 'ApiController@index');
+Route::get('/author/{name}', 'ApiController@author_filter');
+Route::get('/category/{category}', 'ApiController@category_filter');
+
