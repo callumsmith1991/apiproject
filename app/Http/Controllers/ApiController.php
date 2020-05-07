@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Books;
+use Illuminate\Validation\ValidationException;
 
 class ApiController extends Controller
 {
@@ -142,5 +143,33 @@ class ApiController extends Controller
 
     public function create_book(Request $request)
     {
+
+        try {
+
+            $validated = $request->validate([
+                'ISBN' => ['required', 'regex:/^[0-9- ]+$/D', 'min:14'],
+                'title' => 'required',
+                'author' => 'required',
+                'price' => ['required', 'regex:/^\d+(\.\d{1,2})?$/']
+             ]);
+
+             Books::create($validated);
+
+             return response()->json([
+                "message" => 'Book created succesfully'
+            ], 201);
+    
+
+
+        } catch (ValidationException $e) {
+
+
+            return response()->json([
+              "message" => "Validation errors",
+              "errors" => $e->errors()
+            ], 400);
+
+        }
+
     }
 }
