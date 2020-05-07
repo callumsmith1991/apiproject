@@ -20,5 +20,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'ApiController@index');
 Route::get('/author/{name}', 'ApiController@author_filter');
-Route::get('/category/{category}', 'ApiController@category_filter');
+Route::get('/categories/', 'ApiController@all_categories');
+Route::get('/categories/{category}', 'ApiController@category_filter');
+Route::get('/categories/{category}/author/{name}', 'ApiController@category_and_author_filter');
+
 
