@@ -24,4 +24,12 @@ Route::get('/categories/', 'ApiController@all_categories');
 Route::get('/categories/{category}', 'ApiController@category_filter');
 Route::get('/categories/{category}/author/{name}', 'ApiController@category_and_author_filter');
 
+Route::post('/create/', 'ApiController@create_book');
+
+Route::get('/create/', function () {
+    return response()->json('hi');
+});
+
+
+
 
