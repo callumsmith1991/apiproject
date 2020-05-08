@@ -26,9 +26,12 @@ Route::get('/categories/{category}/author/{name}', 'ApiController@category_and_a
 
 Route::post('/create/', 'ApiController@create_book');
 
-Route::get('/create/', function () {
-    return response()->json('hi');
-});
+Route::get('/{any}', function ($any) {
+
+    return response()->json('message: 404 not found');
+
+})->where('any', '.*');
+
 
 
 

@@ -21,7 +21,7 @@ class ApiController extends Controller
         } else {
 
             return response()->json([
-                "message" => "We have books to show",
+                "message" => "All Books",
                 "books" => $books
             ], 200);
         }
@@ -131,13 +131,11 @@ class ApiController extends Controller
                 "message" => "Books in " . $category . " by " . $author . "",
                 "books" => $books_by_category_and_author
             ], 200);
-
         } else {
 
             return response()->json([
                 "message" => "No results found for your selected criteria"
             ], 404);
-
         }
     }
 
@@ -151,25 +149,34 @@ class ApiController extends Controller
                 'title' => 'required',
                 'author' => 'required',
                 'price' => ['required', 'regex:/^\d+(\.\d{1,2})?$/']
-             ]);
+            ]);
 
-             Books::create($validated);
+            $check_if_isbn_exists = Books::where('ISBN', '=', $validated['ISBN'])->first();
 
-             return response()->json([
-                "message" => 'Book created succesfully'
-            ], 201);
-    
+            if ($check_if_isbn_exists === null) {
 
+                Books::create($validated);
+
+                return response()->json([
+                    "message" => 'Book created succesfully',
+                    "createdBook" => $validated
+                ], 201);
+
+            } else {
+
+                return response()->json([
+                    "message" => 'ISBN already exists for '.$validated['ISBN'].', this number should be unique',
+                ], 400);
+
+            }
 
         } catch (ValidationException $e) {
 
 
             return response()->json([
-              "message" => "Validation errors",
-              "errors" => $e->errors()
+                "message" => "Validation errors",
+                "errors" => $e->errors()
             ], 400);
-
         }
-
     }
 }

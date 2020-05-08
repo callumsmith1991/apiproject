@@ -1,6 +1,7 @@
   
 import AllBooks from './components/AllBooks.vue';
 import CreateBook from './components/CreateBook.vue';
+import NotFound from './components/404.vue';
 
 export const routes = [
     {
@@ -13,4 +14,9 @@ export const routes = [
         path: '/create/',
         component: CreateBook
     },
+    {
+        name: '404',
+        path: '*',
+        component: NotFound
+    }
 ];

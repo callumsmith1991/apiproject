@@ -50,7 +50,7 @@
           <td>{{ book.title }}</td>
           <td>{{ book.author }}</td>
           <td>{{ book.category }}</td>
-          <td>{{ book.price }}</td>
+          <td>{{ book.price }} GDP</td>
         </tr>
       </tbody>
     </table>
@@ -70,49 +70,64 @@ export default {
       books: [],
       booksToShow: "",
       authorFilter: "",
-      categoryFilter: ""
+      categoryFilter: "",
+      defaultBooksList: []
     };
   },
   created() {
     this.axios.get("http://127.0.0.1:8000/api/").then(response => {
       this.message = response.data.message;
       this.books = response.data.books;
+      this.defaultBooksList = response.data.books;
       this.booksToShow = true;
     });
   },
   methods: {
     filterBooks() {
       if (this.categoryFilter && this.authorFilter) {
-
-        this.axios.get("http://127.0.0.1:8000/api/categories/"+this.categoryFilter+"/author/"+this.authorFilter+"").then(response => {
-
-          this.message = response.data.message;
-          this.books = response.data.books;
-          
-        });
-
+        this.axios
+          .get(
+            "http://127.0.0.1:8000/api/categories/" +
+              this.categoryFilter +
+              "/author/" +
+              this.authorFilter +
+              ""
+          )
+          .then(response => {
+            this.message = response.data.message;
+            this.books = response.data.books;
+          })
+          .catch(error => {
+            this.message = error.response.data.message;
+            this.books = this.defaultBooksList;
+          });
       } else if (this.categoryFilter) {
-        
-        this.axios.get("http://127.0.0.1:8000/api/categories/"+this.categoryFilter+"").then(response => {
-
-          this.message = response.data.message;
-          this.books = response.data.books;
-          
-        });
-
+        this.axios
+          .get(
+            "http://127.0.0.1:8000/api/categories/" + this.categoryFilter + ""
+          )
+          .then(response => {
+            this.message = response.data.message;
+            this.books = response.data.books;
+          })
+          .catch(error => {
+            this.message = error.response.data.message;
+            this.books = this.defaultBooksList;
+          });
       } else if (this.authorFilter) {
-        
-        this.axios.get("http://127.0.0.1:8000/api/author/"+this.authorFilter+"").then(response => {
-
-          this.message = response.data.message;
-          this.books = response.data.books;
-          
-        });
-
+        this.axios
+          .get("http://127.0.0.1:8000/api/author/" + this.authorFilter + "")
+          .then(response => {
+            this.message = response.data.message;
+            this.books = response.data.books;
+          })
+          .catch(error => {
+            this.message = error.response.data.message;
+            this.books = this.defaultBooksList;
+          });
       } else {
-
-        this.message = 'No filter Option chosen';
-
+        this.message = "No filter Option chosen";
+        this.books = this.defaultBooksList;
       }
     }
   }

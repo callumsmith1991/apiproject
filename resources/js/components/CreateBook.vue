@@ -15,11 +15,11 @@
           <input type="text" class="form-control" v-model="book.author" />
         </div>
         <div class="form-group">
-          <label>Category</label>
+          <label>Category (if adding multiple categories, please seperate each by comma)</label>
           <input type="text" class="form-control" v-model="book.category" />
         </div>
         <div class="form-group">
-          <label>Price</label>
+          <label>Price (GDP)</label>
           <input type="text" class="form-control" v-model="book.price" />
         </div>
         <button type="submit" class="btn btn-primary">Add Book</button>
@@ -33,9 +33,7 @@
           <li v-for="error in errors" :key="error">{{ error }}</li>
         </ul>
       </div>
-      <div class="alert alert-success" role="alert" v-if="success">
-         {{ message }}
-      </div>
+      <div class="alert alert-success" role="alert" v-if="success">{{ message }}</div>
     </div>
   </div>
 </template>
@@ -56,36 +54,36 @@ export default {
       this.axios
         .post("http://127.0.0.1:8000/api/create/", this.book)
         .then(response => {
+          console.log(response.data);
 
-           console.log(response.data);
-        
-           if(this.hasValidationErrors == true) {
-              this.hasValidationErrors = false;
-           }
+          if (this.hasValidationErrors == true) {
+            this.hasValidationErrors = false;
+          }
 
-           this.success = true;
-           this.message = response.data.message;
-
-
+          this.success = true;
+          this.message = response.data.message;
         })
         .catch(error => {
-          // console.log(error.response.data.errors);
+          console.log(error.response.data);
 
           this.success = false;
 
           this.hasValidationErrors = true;
 
-          var errorsArr = [];
-          var errors = Object.entries(error.response.data.errors);
+          if (error.response.data.errors) {
+            var errorsArr = [];
 
-          for (var i = 0; i < errors.length; i++) {
-            errorsArr.push(errors[i][1][0]);
-          } 
+            var errors = Object.entries(error.response.data.errors);
 
-          this.errors = errorsArr;
+            for (var i = 0; i < errors.length; i++) {
+              errorsArr.push(errors[i][1][0]);
+            }
+
+            this.errors = errorsArr;
+            
+          }
 
           this.message = error.response.data.message;
-
         });
     }
   }
