@@ -14,4 +14,4 @@
 <li><strong>/api/create/</strong> Create a new book using this endpoint. ISBN, title, author and price names are required, category optional</li>
 </ul>
 <h3>Usage</h3>
-<p>Simply set up .env file, install composer in project and run php artisan migrate --seed to get app up and running</p>
+<p>Simply set up .env file, install composer in project, configure your .env and run php artisan migrate --seed to get app up and running</p>
